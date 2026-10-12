@@ -18,3 +18,5 @@ ipch/
 *.lib
 *.ilk
 *.pch
+*.vcxproj
+*.filters

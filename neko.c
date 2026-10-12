@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 FILE*
 openfile(char* filename)
@@ -18,18 +19,16 @@ find_size_file(FILE* file)
 	fseek(file, 0, SEEK_SET);
 	return size;
 }
-
 void
 help()
 {
-	printf("no file found! \n neko: \n argv 1: filename");
+	printf("no file found! \n neko: \n argument 1: file ");
 }
 
 int
 main(int argc, char **argv)
 {
-	if (argc < 2 ) { help(); exit(1); }
-
+	if (argc < 3 ) { help(); exit(1); }
 	FILE* file = openfile(argv[1]);
 	
 

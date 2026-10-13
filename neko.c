@@ -5,8 +5,8 @@
 FILE*
 openfile(char* filename)
 {
-	FILE* file = fopen(filename, "r"); /* open file with read */
-	if (file == 0x0 ) { exit(1); } /* if file NULL (does not exist) that exit */
+	FILE* file = fopen(filename, "rb"); /* open file with read */
+	if (file == 0x0) { return 0x0; } /* if file NULL (does not exist) that exit */
 
 	return file; /* return file */
 }
@@ -29,17 +29,21 @@ int
 main(int argc, char **argv) /* entry point */
 {
 	if (argc < 2 ) { help(); exit(1); } /* if there are not enough arguments then exit */
-	FILE* file = openfile(argv[1]); /* get file */
-	
+	for (int i = 1; i < argc; i++) {
+		FILE* file = openfile(argv[i]);
+		if (file == 0x0) { fprintf(stderr, "neko, %s: No such file or directory\n", argv[i]); continue;  }
 
-	long size = find_size_file(file); /* find out the size */
-	char *content = malloc(size + 1); /* allocate space for characters on the heap */
-	if (content == 0x0) { fclose(file); return 1; } /* if nullptr then exit */
-	fread(content, sizeof(char), size, file); /* write the characters from the file into the buffer (content) */
-	content[size] = '\0'; /* add a null terminator */
-	printf("%s", content); /* output the buffer contents */
-	free(content); /* free up memory */
-	content = 0x0; /* reset the pointer to null */
-	fclose(file); /* close file */
+		long size = find_size_file(file); /* find out the size */
+		if (size < 0) { fprintf(stderr, "neko: %s: Failed to read size\n", argv[i]); fclose(file); continue; } /* if the file is erroneous*/
+		char* content = malloc(size + 1); /* allocate space for characters on the heap */
+		if (content == 0x0) { fclose(file); return 1; } /* if there is not enough memory to read it then exit */
+
+		size_t bytes_read = fread(content, sizeof(char), size, file); /* write the characters from the file into the buffer (content) */
+		content[bytes_read] = '\0'; /* add a null terminator */
+
+		printf("%s", content); /* output the buffer contents */
+		free(content); /* free up memory */
+		fclose(file); /* close file */
+	}
 	return 0;
 }

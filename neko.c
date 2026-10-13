@@ -3,11 +3,13 @@
 #include <string.h>
 
 FILE*
-openfile(char* filename)
+openfile(char** filename)
 {
-	FILE* file = fopen(filename, "rb"); /* open file with read */
-	if (file == 0x0) { return 0x0; } /* if file NULL (does not exist) that exit */
+	if (filename == 0x0 || *filename == 0x0) { return 0x0; } /* if pointer null then return NULL*/
 
+	FILE* file = fopen(*filename, "rb"); /* open file with read */
+	if (file == 0x0) { return 0x0; } /* if file NULL (does not exist) that return NULL */
+	
 	return file; /* return file */
 }
 
@@ -30,7 +32,7 @@ main(int argc, char **argv) /* entry point */
 {
 	if (argc < 2 ) { help(); exit(1); } /* if there are not enough arguments then exit */
 	for (int i = 1; i < argc; i++) {
-		FILE* file = openfile(argv[i]);
+		FILE* file = openfile(&argv[i]);
 		if (file == 0x0) { fprintf(stderr, "neko, %s: No such file or directory\n", argv[i]); continue;  }
 
 		long size = find_size_file(file); /* find out the size */

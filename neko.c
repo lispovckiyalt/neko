@@ -43,7 +43,17 @@ main(int argc, char **argv) /* entry point */
 		size_t bytes_read = fread(content, sizeof(char), size, file); /* write the characters from the file into the buffer (content) */
 		content[bytes_read] = '\0'; /* add a null terminator */
 
-		printf("%s", content); /* output the buffer contents */
+		int line = 1; /* current line */
+		printf("%d.  ", line++);
+
+		for (size_t j = 0; j < bytes_read; j++)
+		{
+			putchar(content[j]);
+			if (content[j] == '\n' && j + 1 < bytes_read)
+			{
+				printf("%d.  ", line++);
+			}
+		}
 		free(content); /* free up memory */
 		fclose(file); /* close file */
 	}

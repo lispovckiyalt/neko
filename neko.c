@@ -44,15 +44,19 @@ main(int argc, char **argv) /* entry point */
 		content[bytes_read] = '\0'; /* add a null terminator */
 
 		int line = 1; /* current line */
-		printf("%d.  ", line++);
+		printf("%d.  ", line++); /* print line */
 
-		for (size_t j = 0; j < bytes_read; j++)
+		for (size_t j = 0; j < bytes_read; j++) 
 		{
-			putchar(content[j]);
+			putchar(content[j]); 
 			if (content[j] == '\n' && j + 1 < bytes_read)
 			{
 				printf("%d.  ", line++);
 			}
+		}
+
+		if (bytes_read > 0 && content[bytes_read - 1] != '\n') {
+			printf("\n");
 		}
 		free(content); /* free up memory */
 		fclose(file); /* close file */

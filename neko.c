@@ -32,7 +32,7 @@ main(int argc, char **argv) /* entry point */
 {
 	if (argc < 2 ) { help(); exit(1); } /* if there are not enough arguments then exit */
 	for (int i = 1; i < argc; i++) {
-		FILE* file = openfile(&argv[i]);
+		FILE* file = openfile(&argv[i]); /* get file */
 		if (file == 0x0) { fprintf(stderr, "neko, %s: No such file or directory\n", argv[i]); continue;  }
 
 		long size = find_size_file(file); /* find out the size */
@@ -43,15 +43,15 @@ main(int argc, char **argv) /* entry point */
 		size_t bytes_read = fread(content, sizeof(char), size, file); /* write the characters from the file into the buffer (content) */
 		content[bytes_read] = '\0'; /* add a null terminator */
 
-		int line = 1; /* current line */
-		printf("%d.  ", line++); /* print line */
+		int line = 1; /* creating a variable with line values */
+		printf("%d.  ", line++); /* print current line */
 
-		for (size_t j = 0; j < bytes_read; j++) 
+		for (size_t symbols = 0; symbols < bytes_read; symbols++) /* iterate through */
 		{
-			putchar(content[j]); 
-			if (content[j] == '\n' && j + 1 < bytes_read)
+			putchar(content[symbols]); /* write a character from content (which contains characters from the file) */
+			if (content[symbols] == '\n' && symbols + 1 < bytes_read) /* if a newline character is found */
 			{
-				printf("%d.  ", line++);
+				printf("%d.  ", line++); /* output the line number */
 			}
 		}
 

@@ -20,3 +20,4 @@ ipch/
 *.pch
 *.vcxproj
 *.filters
+a.out

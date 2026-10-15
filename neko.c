@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 FILE*
 openfile(char** filename)
@@ -13,53 +11,39 @@ openfile(char** filename)
 	return file; /* return file */
 }
 
-long
-find_size_file(FILE* file)
-{
-	fseek(file, 0, SEEK_END); /* open the file and look at the very end */
-	long size = ftell(file); /* get the number of characters */
-	fseek(file, 0, SEEK_SET); /* back to top */
-	return size; /* return size */
-}
 void
 help()
 {
-	printf("no file found! \n neko: \n argument 1: file "); /* help note */
+	fprintf(stderr, "no file found! \n neko: \n argument 1: file "); /* help note */
 }
 
 int
 main(int argc, char **argv) /* entry point */
 {
-	if (argc < 2 ) { help(); exit(1); } /* if there are not enough arguments then exit */
-	for (int i = 1; i < argc; i++) {
-		FILE* file = openfile(&argv[i]); /* get file */
-		if (file == 0x0) { fprintf(stderr, "neko, %s: No such file or directory\n", argv[i]); continue;  }
+	if (argc < 2 ) { help(); return 1; } /* if there are not enough arguments then exit */
 
-		long size = find_size_file(file); /* find out the size */
-		if (size < 0) { fprintf(stderr, "neko: %s: Failed to read size\n", argv[i]); fclose(file); continue; } /* if the file is erroneous*/
-		char* content = malloc(size + 1); /* allocate space for characters on the heap */
-		if (content == 0x0) { fclose(file); return 1; } /* if there is not enough memory to read it then exit */
+    for (int files = 1; files < argc; files++) { /* iterate through argc */
+        FILE* file = openfile(&argv[files]); /* open file */
+        if (file == 0x0) { fprintf(stderr, "neko: %s: No such file or directory\n", argv[files]); continue; }
+        unsigned long current_line = 1;
+        int c_char; /* current char */
+        int p_char = '\n'; /* previous symbol */
 
-		size_t bytes_read = fread(content, sizeof(char), size, file); /* write the characters from the file into the buffer (content) */
-		content[bytes_read] = '\0'; /* add a null terminator */
+        while (1) { /* infinite cycle (until the file has been read) */
+            c_char = getc(file); /* get char */
+            if (c_char == EOF) {break;} /* if error break */
+            if (p_char == '\n') { printf("%lu.  ", current_line++);  } /* if the previous character was \n, then indicate which line it is on */
+            putchar(c_char); /* show symbol */
+            p_char = c_char; /* change the previous symbol */
+        }
 
-		int line = 1; /* creating a variable with line values */
-		printf("%d.  ", line++); /* print current line */
+        if (p_char != '\n' && current_line > 1) {
+            printf("\n");
+        }
 
-		for (size_t symbols = 0; symbols < bytes_read; symbols++) /* iterate through */
-		{
-			putchar(content[symbols]); /* write a character from content (which contains characters from the file) */
-			if (content[symbols] == '\n' && symbols + 1 < bytes_read) /* if a newline character is found */
-			{
-				printf("%d.  ", line++); /* output the line number */
-			}
-		}
+        if (ferror(file)) {return -1;}
 
-		if (bytes_read > 0 && content[bytes_read - 1] != '\n') {
-			printf("\n");
-		}
-		free(content); /* free up memory */
-		fclose(file); /* close file */
-	}
+        fclose(file);
+    }
 	return 0;
 }

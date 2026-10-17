@@ -2,6 +2,8 @@
 
 Simple dynamic C file reader.
 
+# Build
+
 ```bash
 clang neko.c
 ```

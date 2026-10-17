@@ -37,7 +37,7 @@ main(int argc, char **argv) /* entry point */
 			putchar(c_char); /* show symbol */
 			p_char = c_char; /* change the previous symbol */
 		}
-        if (p_char != '\n ' && current_line > 1) {
+        if (p_char != '\n' && current_line > 1) {
             printf("\n");
         }
         if (ferror(file)) {return -1; }

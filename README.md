@@ -1,15 +1,42 @@
 # Neko
 
-Simple dynamic C file reader.
+Neko is a small C utility for reading files.
 
-# Build
+## Build
 
-```bash
-clang neko.c
+Requirements:
+
+- CMake
+- A C compiler, such as GCC or Clang
+
+Configure and build the project:
+
+```sh
+cmake -S . -B build
+cmake --build build
 ```
 
-or
+The executable will be created at:
 
-```bash
-gcc neko.c
+```text
+build/neko
 ```
+
+## Run
+
+```sh
+./build/neko
+```
+
+## Project structure
+
+```text
+inc/          Public headers
+src/          Application source code
+src/file/     File-reading implementation
+build/        CMake build directory
+```
+
+## License
+
+See [`LICENSE`](LICENSE).

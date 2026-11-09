@@ -21,3 +21,5 @@ ipch/
 *.vcxproj
 *.filters
 a.out
+build
+

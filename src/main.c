@@ -8,7 +8,8 @@ int
 main(int argc, char ** argv)
 {
 
-    if (argc < 2) { /* TODO make usage */ return 1; }
+    if (argc < 2) { 
+        fprintf(stderr, "neko: usage: file\n"); return 1; }
 
     for (int files = 1; files < argc; files++)
     {
